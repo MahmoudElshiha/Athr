@@ -1,0 +1,83 @@
+Table User {
+  id int [pk]
+  first_name varchar
+  last_name varchar
+  phone varchar
+  email varchar
+  email_verified boolean
+  password varchar
+  created_at datetime
+  updated_at datetime
+}
+
+Table Favourites {
+  id int [pk]
+  user_id int [ref: > User.id]
+  product_id int [ref: > Product.id]
+}
+
+Table Product {
+  id int [pk]
+  category_id int [ref: > ProductCategories.id]
+  name varchar
+  manufacturer varchar
+  description text
+  price decimal
+  rate decimal
+  created_at datetime
+  updated_at datetime
+}
+
+Table ProductImages {
+  id int [pk]
+  product_id int [ref: > Product.id]
+  image varchar
+}
+
+Table ProductCategories {
+  id int [pk]
+  name varchar
+}
+
+Table ProductPenalties {
+  id int [pk]
+  product_id int [ref: > Product.id]
+  name varchar
+  penalty text
+}
+
+Table Cart {
+  id int [pk]
+  user_id int [ref: > User.id, unique]
+}
+
+Table CartProduct {
+  id int [pk]
+  cart_id int [ref: > Cart.id]
+  product_id int [ref: > Product.id]
+  quantity int
+}
+
+Table Orders {
+  id int [pk]
+  user_id int [ref: > User.id]
+  created_at datetime
+  updated_at datetime
+}
+
+Table Order_Product {
+  id int [pk]
+  order_id int [ref: > Orders.id]
+  product_id int [ref: > Product.id]
+  quantity int
+}
+
+Table Reviews {
+  id int [pk]
+  user_id int [ref: > User.id]
+  product_id int [ref: > Product.id]
+  rating int
+  content text
+  created_at datetime
+  updated_at datetime
+}
