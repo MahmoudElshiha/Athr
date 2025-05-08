@@ -41,6 +41,18 @@ class Product extends Model
 
     public function cartProducts(): HasMany
     {
-        return $this->hasMany(cartProduct::class);
+        return $this->hasMany(CartProduct::class);
+    }
+
+    public function favourites(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'favourites');
+    }
+
+
+    public function isFavouritedByUser($user_id): bool
+    {
+
+        return $this->favourites()->where('user_id', $user_id)->exists();
     }
 }
