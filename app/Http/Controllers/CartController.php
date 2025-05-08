@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\Cart\AddToCartRequest;
 use App\Http\Requests\Cart\UpdateCartRequest;
 use App\Http\Resources\CartResource;
-use App\Models\cartProduct;
+use App\Models\CartProduct;
 
 class CartController extends Controller
 {
