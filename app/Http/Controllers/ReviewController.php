@@ -34,7 +34,7 @@ class ReviewController extends Controller
 
         $review = Review::create($validated);
 
-        return api_success('Review created successfully', $review, 201);
+        return api_success();
     }
 
 
@@ -51,6 +51,6 @@ class ReviewController extends Controller
         // Delete the review
         $review->delete();
 
-        return api_success(null, 'Review deleted successfully.');
+        return api_success();
     }
 }

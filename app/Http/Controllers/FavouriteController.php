@@ -41,8 +41,6 @@ class FavouriteController extends Controller
 
         return api_success(
             new FavouriteResource($favourite->load('product')),
-            'Favourite added successfully',
-            201
         );
     }
 
@@ -62,9 +60,6 @@ class FavouriteController extends Controller
 
         $favourite->delete();
 
-        return api_success(
-            null,
-            'Favourite deleted successfully'
-        );
+        return api_success();
     }
 }

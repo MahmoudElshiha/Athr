@@ -23,7 +23,7 @@ class CartController extends Controller
         if (!$cart) {
             return api_error('Cart not found', 404);
         }
-        return api_success(new CartResource($cart), 'Cart retrieved successfully');
+        return api_success(new CartResource($cart));
     }
 
     public function store(AddToCartRequest $request)
@@ -41,7 +41,7 @@ class CartController extends Controller
             $cartProduct->quantity = ($cartProduct->quantity ?? 0) + $validated['quantity'];
             $cartProduct->save();
 
-            return api_success(new CartResource($cartProduct->load('product')), 'Product added to cart', 201);
+            return api_success(new CartResource($cartProduct->load('product')));
         });
     }
 
@@ -65,7 +65,7 @@ class CartController extends Controller
         $cartProduct->quantity = $validated['quantity'];
         $cartProduct->save();
 
-        return api_success(new CartProduct($cartProduct), 'Cart updated successfully');
+        return api_success(new CartProduct($cartProduct));
     }
 
     public function destroy(string $id)
@@ -84,6 +84,6 @@ class CartController extends Controller
             return api_error('Product not found in cart', 404);
         }
 
-        return api_success(null, 'Product removed from cart');
+        return api_success();
     }
 }

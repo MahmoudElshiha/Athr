@@ -32,7 +32,7 @@ class ProductController extends Controller
             }
         }
 
-        return api_success(new ProductResource($product), 'Product added successfully', 201);
+        return api_success(new ProductResource($product));
     }
 
     public function show($product_id)
@@ -44,7 +44,7 @@ class ProductController extends Controller
         }
 
 
-        return api_success(new ProductResource($product), 'Product added successfully', 201);
+        return api_success(new ProductResource($product));
     }
 
     public function update(UpdateProductRequest $request, string $id)
@@ -59,7 +59,7 @@ class ProductController extends Controller
         $product->update($valdiated);
 
 
-        return api_success(new ProductResource($product), 'Product updated successfully');
+        return api_success(new ProductResource($product));
     }
 
 
@@ -73,6 +73,6 @@ class ProductController extends Controller
 
         $product->delete();
 
-        return api_success(null, 'Product deleted successfully');
+        return api_success();
     }
 }

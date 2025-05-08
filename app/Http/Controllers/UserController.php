@@ -41,7 +41,7 @@ class UserController extends Controller
         $user->update($validated);
 
 
-        return api_success(new UserResource($user), 'User Updated successfully');
+        return api_success(new UserResource($user));
     }
 
     public function destroy()
@@ -56,6 +56,6 @@ class UserController extends Controller
 
         $user->delete();
 
-        return api_success(null, 'User deleted successfully');
+        return api_success();
     }
 }
