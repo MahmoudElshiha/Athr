@@ -13,8 +13,18 @@ class CartResource extends JsonResource
             'id' => $this->id,
             'user_id' => $this->user_id,
             'products' => $this->whenLoaded('cartProducts', function () {
-                return ProductResource::collection($this->cartProducts->pluck('product'));
-            })
+                return ProductResource::collection(
+                    $this->cartProducts->map->product
+                );
+            }),
+            'product_count' => $this->whenLoaded(
+                'cartProducts',
+                fn() => $this->cartProducts->count()
+            ),
+            'total_price' => $this->whenLoaded(
+                'cartProducts',
+                fn() => $this->cartProducts->sum(fn($product) =>  $product->quantity)
+            ),
         ];
     }
 }

@@ -47,7 +47,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/', [ProductController::class, 'index']);
         Route::get('/{product_id}', [ProductController::class, 'show']);
         Route::post('/', [ProductController::class, 'store']);
-        Route::patch('/{product_id}', [ProductController::class, 'update']);
         Route::delete('/{product_id}', [ProductController::class, 'destroy']);
 
         Route::post('/{product_id}/images', [ProductImageController::class, 'store']);

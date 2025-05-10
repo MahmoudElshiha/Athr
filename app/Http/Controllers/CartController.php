@@ -9,6 +9,7 @@ use App\Http\Requests\Cart\AddToCartRequest;
 use App\Http\Requests\Cart\UpdateCartRequest;
 use App\Http\Resources\CartResource;
 use App\Models\CartProduct;
+use App\Models\Product;
 
 class CartController extends Controller
 {
@@ -17,12 +18,8 @@ class CartController extends Controller
         $user = Auth::user();
 
         $cart = Cart::with(['cartProducts.product', 'cartProducts.product.productImages'])
-            ->where('user_id', $user->id)
-            ->first();
+            ->firstOrCreate(['user_id' => $user->id]);
 
-        if (!$cart) {
-            return api_error('Cart not found', 404);
-        }
         return api_success(new CartResource($cart));
     }
 
@@ -32,16 +29,23 @@ class CartController extends Controller
 
 
         return DB::transaction(function () use ($validated) {
-            $cart = Cart::firstOrCreate(['user_id' => auth()->user()->id]);
+            $cart = Cart::firstOrCreate(['user_id' => auth()->id()]);
 
             $cartProduct = $cart->cartProducts()->firstOrNew([
-                'product_id' => $validated['product_id']
+                'product_id' => $validated['product_id'],
+                'cart_id' => $cart->id,
             ]);
 
-            $cartProduct->quantity = ($cartProduct->quantity ?? 0) + $validated['quantity'];
+            $newQuantity = ($cartProduct->exists ? $cartProduct->quantity : 0) + $validated['quantity'];
+
+            // Update cart
+            $cartProduct->quantity = $newQuantity;
             $cartProduct->save();
 
-            return api_success(new CartResource($cartProduct->load('product')));
+
+            return api_success(new CartResource(
+                $cartProduct->cart->fresh()->load('cartProducts')
+            ));
         });
     }
 
@@ -56,7 +60,7 @@ class CartController extends Controller
             return api_error('Cart not found', 404);
         }
 
-        $cartProduct = $cart->cartProducts()->where('product_id', $id)->first();
+        $cartcartProducts = $cart->cartProducts()->where('product_id', $id)->first();
 
         if (!$cartProduct) {
             return api_error('Product not found in cart', 404);
