@@ -26,7 +26,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     // Add other admin routes
 });
 
-//$make another table for admins and make auth for it and genertae guard and use it
+//$make another table for admins and make auth for it and generate guard and use it
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return Auth::user();

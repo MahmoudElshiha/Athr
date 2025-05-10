@@ -6,6 +6,7 @@ use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Requests\Product\UpdateProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
+use Illuminate\Support\Facades\Storage;
 
 
 class ProductController extends Controller
@@ -22,16 +23,11 @@ class ProductController extends Controller
     {
         $valdiated = $request->validated();
 
-        $product = Product::create($valdiated);
+        $product = Product::create(collect($valdiated)->except('images')->all());
 
         // create product images
         if (isset($valdiated['images'])) {
-            foreach ($valdiated['images'] as $image) {
-                $product->productImages()->create([
-                    'product_id' => $product->id,
-                    'image' => $image,
-                ]);
-            }
+            $product->uploadImages($valdiated);
         }
 
         return api_success(new ProductResource($product));
