@@ -38,8 +38,12 @@ class UserController extends Controller
             return api_error('User not found', 404);
         }
 
-        $user->update($validated);
+        // Verify if the user is the same or an admin
+        if (!auth()->user()->is_admin && auth()->id() !== $user->id) {
+            return api_error('Unauthorized', 403);
+        }
 
+        $user->update($validated);
 
         return api_success(new UserResource($user));
     }

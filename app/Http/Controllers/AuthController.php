@@ -40,10 +40,6 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
 
-        if (!auth()->check()) {
-            return api_error('No authenticated user.', 401);
-        }
-
         auth()->user()->currentAccessToken()->delete();
         return api_success();
     }

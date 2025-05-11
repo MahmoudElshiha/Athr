@@ -12,7 +12,9 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::with(['productImages', 'productPenalties'])->get();
+        $products = Product::with(['productImages', 'productPenalties'])
+            ->paginate(request('per_page', 10));
+
         return api_success(ProductResource::collection($products));
     }
 
