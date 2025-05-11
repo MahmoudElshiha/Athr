@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -11,7 +12,7 @@ class AdminController extends Controller
     public function indexUsers()
     {
         $users = User::all();
-        return api_success($users, 'Users retrieved successfully');
+        return api_success(new UserResource($users));
     }
 
     public function deleteUser($user_id)
@@ -31,6 +32,6 @@ class AdminController extends Controller
         // Delete the user
         $user->delete();
 
-        return api_success(null, 'User deleted successfully');
+        return api_success();
     }
 }

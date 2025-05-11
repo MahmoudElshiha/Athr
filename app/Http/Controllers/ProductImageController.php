@@ -26,7 +26,7 @@ class ProductImageController extends Controller
             ]);
         }
 
-        return api_success('Images added successfully', 201);
+        return api_success();
     }
 
     public function destroy(string $product_id, string $image_id)
@@ -41,6 +41,6 @@ class ProductImageController extends Controller
 
         $image->delete();
 
-        return api_success(null, 'Image deleted successfully.');
+        return api_success();
     }
 }

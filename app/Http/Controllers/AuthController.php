@@ -17,7 +17,7 @@ class AuthController extends Controller
 
         $user = User::create($validated);
 
-        return api_success(new UserResource($user), 'User created successfully', 201);
+        return api_success(new UserResource($user));
     }
 
     public function login(LoginRequest $request)
@@ -33,8 +33,7 @@ class AuthController extends Controller
         return api_success(
             [
                 'token' => $user->createToken('API Token')->plainTextToken,
-            ],
-            'Logged in successfully'
+            ]
         );
     }
 
@@ -46,6 +45,6 @@ class AuthController extends Controller
         }
 
         auth()->user()->currentAccessToken()->delete();
-        return api_success(null, 'Logged out successfully', 200);
+        return api_success();
     }
 }

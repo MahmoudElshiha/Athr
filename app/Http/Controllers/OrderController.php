@@ -82,7 +82,7 @@ class OrderController extends Controller
                 'quantity' => $quantity,
             ]);
         }
-        return api_success(new OrderResource($order), 'Order updated successfully');
+        return api_success(new OrderResource($order));
     }
 
     public function destroy(string $id)
@@ -96,6 +96,6 @@ class OrderController extends Controller
         }
 
         $order->delete();
-        return api_success(null, 'Order deleted successfully');
+        return api_success();
     }
 }
