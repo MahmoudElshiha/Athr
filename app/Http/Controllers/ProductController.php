@@ -16,7 +16,7 @@ class ProductController extends Controller
         $products = Product::with(['productImages', 'productPenalties'])
             ->paginate(request('per_page', 10));
 
-        return api_success(ProductResource::collection($products));
+        return api_success(ProductResource::collection($products), paginate: true);
     }
 
     public function store(StoreProductRequest $request)
