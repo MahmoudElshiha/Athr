@@ -38,6 +38,10 @@ class CartController extends Controller
 
             $newQuantity = ($cartProduct->exists ? $cartProduct->quantity : 0) + $validated['quantity'];
 
+            $product = Product::findOrFail($validated['product_id']);
+            if ($validated['quantity'] > $product->quantity) {
+                return api_error('Not enough stock available', 422);
+            }
             // Update cart
             $cartProduct->quantity = $newQuantity;
             $cartProduct->save();
@@ -60,10 +64,11 @@ class CartController extends Controller
             return api_error('Cart not found', 404);
         }
 
-        $cartcartProducts = $cart->cartProducts()->where('product_id', $id)->first();
+        $cartProduct = $cart->cartProducts()->where('product_id', $id)->firstOrFail();
 
-        if (!$cartProduct) {
-            return api_error('Product not found in cart', 404);
+        $product = Product::findOrFail($id);
+        if ($validated['quantity'] > $product->quantity) {
+            return api_error('Not enough stock available', 422);
         }
 
         $cartProduct->quantity = $validated['quantity'];

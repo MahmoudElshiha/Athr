@@ -14,7 +14,7 @@ class CartResource extends JsonResource
             'user_id' => $this->user_id,
             'products' => $this->whenLoaded('cartProducts', function () {
                 return ProductResource::collection(
-                    $this->cartProducts->map->product
+                    $this->cartProducts->product
                 );
             }),
             'product_count' => $this->whenLoaded(

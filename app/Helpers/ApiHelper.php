@@ -9,7 +9,8 @@ if (! function_exists('api_response')) {
         int $status_code = ResponseAlias::HTTP_OK,
         ?string $message = null,
         mixed $data = null,
-        mixed $errors = null
+        mixed $errors = null,
+        bool $paginate = false
     ): JsonResponse {
         $response = [
             'is_success' => $success,
@@ -24,6 +25,21 @@ if (! function_exists('api_response')) {
         if ($errors !== null) {
             $response['errors'] = $errors;
         }
+        if ($paginate) {
+            $response['pagination'] = [
+                'total' => $data->total(),
+                'count' => $data->count(),
+                'per_page' => $data->perPage(),
+                'current_page' => $data->currentPage(),
+                'total_pages' => $data->lastPage(),
+                'links' => [
+                    'next' => $data->nextPageUrl(),
+                    'previous' => $data->previousPageUrl(),
+                    'first' => $data->url(1),
+                    'last' => $data->url($data->lastPage()),
+                ]
+            ];
+        }
 
         return response()->json($response, $status_code);
     }
@@ -33,9 +49,10 @@ if (! function_exists('api_success')) {
     function api_success(
         mixed $data = null,
         ?string $message = 'success',
-        int $status_code = ResponseAlias::HTTP_OK
+        int $status_code = ResponseAlias::HTTP_OK,
+        bool $paginate = false
     ): JsonResponse {
-        return api_response(true, $status_code, $message, $data);
+        return api_response(true, $status_code, $message, $data, null, $paginate);
     }
 }
 
@@ -46,6 +63,6 @@ if (! function_exists('api_error')) {
         int $status_code = ResponseAlias::HTTP_BAD_REQUEST,
         mixed $errors = null
     ): JsonResponse {
-        return api_response(false, $status_code, $message, null, $errors);
+        return api_response(false, $status_code, $message, null, $errors, false);
     }
 }
